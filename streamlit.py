@@ -33,6 +33,8 @@ page_bg_img = '''
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
+        width: 90%; /* Ensure inputs are the same width */
+        margin: 5px 0; /* Spacing between inputs */
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -61,23 +63,23 @@ st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_h
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
-    Temperature_Above_Avg = st.text_input('Temperature Above Avg')
-    Insecticide_Use = st.text_input('Insecticide Use')
+    Temperature_Above_Avg = st.number_input('Temperature Above Avg (°C)', min_value=-10.0, max_value=50.0, value=25.0, step=0.1)
+    Insecticide_Use = st.number_input('Insecticide Use (0-100%)', min_value=0.0, max_value=100.0, value=70.0, step=1.0)
 
 with col2:
-    High_Rainfall = st.text_input('High Rainfall')
-    Health_Facilities_Adequate = st.text_input('Health Facilities Adequate')
+    High_Rainfall = st.number_input('High Rainfall (mm)', min_value=0.0, max_value=500.0, value=150.0, step=1.0)
+    Health_Facilities_Adequate = st.number_input('Health Facilities Adequate (0-100%)', min_value=0.0, max_value=100.0, value=80.0, step=1.0)
 
 with col3:
-    High_Humidity = st.text_input('High Humidity')
-    Vaccination_Rate_High = st.text_input('Vaccination Rate High')
+    High_Humidity = st.number_input('High Humidity (%)', min_value=0, max_value=100, value=60)
+    Vaccination_Rate_High = st.number_input('Vaccination Rate High (0-100%)', min_value=0.0, max_value=100.0, value=90.0, step=1.0)
 
 with col4:
-    High_Population_Density = st.text_input('High Population Density')
-    Mosquito_Net_Coverage_High = st.text_input('Mosquito Net Coverage High')
+    High_Population_Density = st.number_input('High Population Density (people/km²)', min_value=0, max_value=10000, value=500, step=10)
+    Mosquito_Net_Coverage_High = st.number_input('Mosquito Net Coverage High (0-100%)', min_value=0.0, max_value=100.0, value=75.0, step=1.0)
 
 with col5:
-    Malaria_Outbreak = st.text_input('Malaria Outbreak')
+    Malaria_Outbreak = st.number_input('Malaria Outbreak (0-100%)', min_value=0.0, max_value=100.0, value=30.0, step=1.0)
 
 # Prediction result
 Malaria_diagnosis = ''
