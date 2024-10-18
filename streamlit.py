@@ -1,17 +1,36 @@
-import firebase_admin
-from firebase_admin import credentials, firestore
 import streamlit as st
 import pickle
-from datetime import datetime
+firebase_sdk = '''
+<script type="module">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-# Initialize Firebase
-cred = credentials.Certificate("path/to/your-firebase-adminsdk.json")
-firebase_admin.initialize_app(cred)
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0yyUL8wjXDxQructg0o5aGlhu4uh-q9o",
+    authDomain: "datastorage-ffdaf.firebaseapp.com",
+    projectId: "datastorage-ffdaf",
+    storageBucket: "datastorage-ffdaf.appspot.com",
+    messagingSenderId: "207526590316",
+    appId: "1:207526590316:web:7923ed875bc41d9bab6549"
+  };
 
-db = firestore.client()
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+'''
 
+st.markdown(firebase_sdk, unsafe_allow_html=True)
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
+
+# Streamlit input fields
+Temperature_Above_Avg = st.number_input('Temperature Above Avg (°C)', min_value=-10.0, max_value=50.0, value=25.0, step=0.1)
+High_Rainfall = st.number_input('High Rainfall (mm)', min_value=0.0, max_value=500.0, value=150.0, step=1.0)
 
 # Apply background image only
 page_bg_img = '''
@@ -88,45 +107,25 @@ with col3:
 
 # Prediction result
 Malaria_diagnosis = ''
-
-# Function to add test result to Firestore
-def add_test_result(data):
-    db.collection('malaria_test_results').add(data)
-
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
-    try:
-        prediction = Malaria_Project.predict([[
-            Temperature_Above_Avg, High_Rainfall, High_Humidity,
-            High_Population_Density, Malaria_Outbreak, Insecticide_Use,
-            Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
-        ]])
-        if prediction[0] == 1:
-            Malaria_diagnosis = 'The person is affected with Malaria 😷'
-        else:
-            Malaria_diagnosis = 'The person is not affected with Malaria 😊'
+    prediction = Malaria_Project.predict([[Temperature_Above_Avg, High_Rainfall]])
+    Malaria_diagnosis = 'The person is affected with Malaria 😷' if prediction[0] == 1 else 'The person is not affected with Malaria 😊'
 
-        # Prepare data for Firestore
-        data = {
-            'timestamp': datetime.now(),
-            'Temperature_Above_Avg': Temperature_Above_Avg,
-            'High_Rainfall': High_Rainfall,
-            'High_Humidity': High_Humidity,
-            'High_Population_Density': High_Population_Density,
-            'Malaria_Outbreak': Malaria_Outbreak,
-            'Insecticide_Use': Insecticide_Use,
-            'Health_Facilities_Adequate': Health_Facilities_Adequate,
-            'Vaccination_Rate_High': Vaccination_Rate_High,
-            'Mosquito_Net_Coverage_High': Mosquito_Net_Coverage_High,
-            'Malaria_diagnosis': Malaria_diagnosis
-        }
+    # Prepare data to save
+    data = {
+        'Temperature_Above_Avg': Temperature_Above_Avg,
+        'High_Rainfall': High_Rainfall,
+        'Malaria_diagnosis': Malaria_diagnosis
+    }
 
-        # Add data to Firestore
-        add_test_result(data)
+    # Call JavaScript function to save to Firestore
+    st.markdown(f'''
+        <script>
+            const data = {data};
+            saveToFirestore(data);
+        </script>
+    ''', unsafe_allow_html=True)
 
-        st.success(Malaria_diagnosis)
-    except ValueError as e:
-        st.error(f"Prediction error: {str(e)}")
+    st.success(Malaria_diagnosis)
 
-# Display result
-st.success(Malaria_diagnosis)
