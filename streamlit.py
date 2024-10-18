@@ -1,27 +1,10 @@
 import pickle
 import streamlit as st
-import requests
 
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
 
-# Get the user's state using IP info from ip-api.com
-def get_user_state():
-    try:
-        response = requests.get('http://ip-api.com/json/', timeout=5)
-        data = response.json()
-        if data['status'] == 'success':
-            return data.get('regionName', 'Unknown State')
-        else:
-            return f"Error: {data.get('message', 'Unable to retrieve state')}"
-    except Exception as e:
-        return f"Exception: {str(e)}"
-
-# Fetch and print the state
-user_state = get_user_state()
-print(f"User State (Debug): {user_state}")
-
-# Apply background image
+# Apply background image only
 page_bg_img = '''
 <style>
     [data-testid="stAppViewContainer"] {
@@ -31,17 +14,17 @@ page_bg_img = '''
         background-repeat: no-repeat;
     }
     [data-testid="stHeader"] {
-        background: rgba(0, 0, 0, 0);
+        background: rgba(0, 0, 0, 0); /* Transparent header */
     }
     .block-container {
         max-width: 800px;
-        margin: 50px auto;
+        margin: 50px auto; /* Center the content */
         padding: 20px;
-        border: 2px solid #ccc;
+        border: 2px solid #ccc; /* Full border */
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(10px);
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Background blur effect */
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
     }
     input {
         background-color: white !important;
@@ -50,8 +33,8 @@ page_bg_img = '''
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
-        width: 90%;
-        margin: 5px 0;
+        width: 90%; /* Ensure inputs are the same width */
+        margin: 5px 0; /* Spacing between inputs */
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -73,9 +56,10 @@ page_bg_img = '''
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
+# Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
-st.markdown(f"<h4>State: {user_state}</h4>", unsafe_allow_html=True)
 
+# Input section in 3 columns
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -93,8 +77,10 @@ with col3:
     Mosquito_Net_Coverage_High = st.number_input('Mosquito Net Coverage High (0-100%)', min_value=0.0, max_value=100.0, value=75.0, step=1.0)
     Malaria_Outbreak = st.number_input('Malaria Outbreak (0-100%)', min_value=0.0, max_value=100.0, value=30.0, step=1.0)
 
+# Prediction result
 Malaria_diagnosis = ''
 
+# Prediction button
 if st.button('🔍 Malaria Disease Test'):
     try:
         prediction = Malaria_Project.predict([[
@@ -109,6 +95,5 @@ if st.button('🔍 Malaria Disease Test'):
     except ValueError as e:
         st.error(f"Prediction error: {str(e)}")
 
+# Display result
 st.success(Malaria_diagnosis)
-
-print(f"User State (Debug): {user_state}")
