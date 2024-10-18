@@ -1,24 +1,8 @@
 import pickle
 import streamlit as st
-import os
-import pandas as pd
-from datetime import datetime
 
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
-
-# CSV file path
-CSV_FILE_PATH = 'malaria_test_results.csv'
-
-# Check if the CSV file exists, and if not, create it with the header
-if not os.path.exists(CSV_FILE_PATH):
-    df = pd.DataFrame(columns=[
-        'timestamp', 'Temperature_Above_Avg', 'High_Rainfall', 'High_Humidity',
-        'High_Population_Density', 'Malaria_Outbreak', 'Insecticide_Use',
-        'Health_Facilities_Adequate', 'Vaccination_Rate_High', 'Mosquito_Net_Coverage_High',
-        'Malaria_diagnosis'
-    ])
-    df.to_csv(CSV_FILE_PATH, index=False)
 
 # Apply background image only
 page_bg_img = '''
@@ -30,17 +14,17 @@ page_bg_img = '''
         background-repeat: no-repeat;
     }
     [data-testid="stHeader"] {
-        background: rgba(0, 0, 0, 0); /* Transparent header */
+        background: rgba(0, 0, 0, 0);
     }
     .block-container {
         max-width: 800px;
-        margin: 50px auto; /* Center the content */
+        margin: 50px auto;
         padding: 20px;
-        border: 2px solid #ccc; /* Full border */
+        border: 2px solid #ccc;
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        backdrop-filter: blur(10px); /* Background blur effect */
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
     }
     input {
         background-color: white !important;
@@ -49,8 +33,8 @@ page_bg_img = '''
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
-        width: 90%; /* Ensure inputs are the same width */
-        margin: 5px 0; /* Spacing between inputs */
+        width: 90%;
+        margin: 5px 0;
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -75,65 +59,58 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 # Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
+# Location input container
+with st.container():
+    state = st.selectbox(
+        'Select your location (Indian State)', 
+        options=[''] + [
+            'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
+            'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
+            'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
+            'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+            'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+        ],
+        index=0
+    )
+
 # Input section in 3 columns
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    Temperature_Above_Avg = st.number_input('Temperature Above Avg (°C)', min_value=-10.0, max_value=50.0, value=25.0, step=0.1)
-    High_Rainfall = st.number_input('High Rainfall (mm)', min_value=0.0, max_value=500.0, value=150.0, step=1.0)
-    High_Humidity = st.number_input('High Humidity (%)', min_value=0, max_value=100, value=60)
+    Temperature_Above_Avg = st.number_input('Temperature Above Avg (°C)', min_value=-10.0, max_value=50.0, step=0.1)
+    High_Rainfall = st.number_input('High Rainfall (mm)', min_value=0.0, max_value=500.0, step=1.0)
+    High_Humidity = st.number_input('High Humidity (%)', min_value=0, max_value=100)
 
 with col2:
-    Insecticide_Use = st.number_input('Insecticide Use (0-100%)', min_value=0.0, max_value=100.0, value=70.0, step=1.0)
-    Health_Facilities_Adequate = st.number_input('Health Facilities Adequate (0-100%)', min_value=0.0, max_value=100.0, value=80.0, step=1.0)
-    Vaccination_Rate_High = st.number_input('Vaccination Rate High (0-100%)', min_value=0.0, max_value=100.0, value=90.0, step=1.0)
+    Insecticide_Use = st.number_input('Insecticide Use (0-100%)', min_value=0.0, max_value=100.0, step=1.0)
+    Health_Facilities_Adequate = st.number_input('Health Facilities Adequate (0-100%)', min_value=0.0, max_value=100.0, step=1.0)
+    Vaccination_Rate_High = st.number_input('Vaccination Rate High (0-100%)', min_value=0.0, max_value=100.0, step=1.0)
 
 with col3:
-    High_Population_Density = st.number_input('High Population Density (people/km²)', min_value=0, max_value=10000, value=500, step=10)
-    Mosquito_Net_Coverage_High = st.number_input('Mosquito Net Coverage High (0-100%)', min_value=0.0, max_value=100.0, value=75.0, step=1.0)
-    Malaria_Outbreak = st.number_input('Malaria Outbreak (0-100%)', min_value=0.0, max_value=100.0, value=30.0, step=1.0)
+    High_Population_Density = st.number_input('High Population Density (people/km²)', min_value=0, max_value=10000, step=10)
+    Mosquito_Net_Coverage_High = st.number_input('Mosquito Net Coverage High (0-100%)', min_value=0.0, max_value=100.0, step=1.0)
+    Malaria_Outbreak = st.number_input('Malaria Outbreak (0-100%)', min_value=0.0, max_value=100.0, step=1.0)
 
 # Prediction result
 Malaria_diagnosis = ''
 
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
-    try:
-        prediction = Malaria_Project.predict([[
-            Temperature_Above_Avg, High_Rainfall, High_Humidity,
-            High_Population_Density, Malaria_Outbreak, Insecticide_Use,
-            Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
-        ]])
-        if prediction[0] == 1:
-            Malaria_diagnosis = 'The person is affected with Malaria 😷'
-        else:
-            Malaria_diagnosis = 'The person is not affected with Malaria 😊'
-
-        # Prepare data for CSV
-        data = {
-            'timestamp': datetime.now(),
-            'Temperature_Above_Avg': Temperature_Above_Avg,
-            'High_Rainfall': High_Rainfall,
-            'High_Humidity': High_Humidity,
-            'High_Population_Density': High_Population_Density,
-            'Malaria_Outbreak': Malaria_Outbreak,
-            'Insecticide_Use': Insecticide_Use,
-            'Health_Facilities_Adequate': Health_Facilities_Adequate,
-            'Vaccination_Rate_High': Vaccination_Rate_High,
-            'Mosquito_Net_Coverage_High': Mosquito_Net_Coverage_High,
-            'Malaria_diagnosis': Malaria_diagnosis
-        }
-
-        # Append data to CSV
-        df = pd.DataFrame([data])
-        df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
-        st.success(Malaria_diagnosis)
-    except ValueError as e:
-        st.error(f"Prediction error: {str(e)}")
+    if state == '':
+        st.error("Please select your location.")
+    else:
+        try:
+            prediction = Malaria_Project.predict([[ 
+                Temperature_Above_Avg, High_Rainfall, High_Humidity, 
+                High_Population_Density, Malaria_Outbreak, Insecticide_Use, 
+                Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High 
+            ]])
+            if prediction[0] == 1:
+                Malaria_diagnosis = 'The person is affected with Malaria 😷'
+            else:
+                Malaria_diagnosis = 'The person is not affected with Malaria 😊'
+        except ValueError as e:
+            st.error(f"Prediction error: {str(e)}")
 
 # Display result
 st.success(Malaria_diagnosis)
-
-# Provide a download link for the CSV file
-st.markdown(f'<a href="data:file/csv;base64,{base64.b64encode(open(CSV_FILE_PATH, "rb").read()).decode()}" download="malaria_test_results.csv">Download CSV file</a>', unsafe_allow_html=True)
