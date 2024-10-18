@@ -44,7 +44,7 @@ Malaria_diagnosis = ''
 
 if st.button('Malaria Disease Test Button'):
     try:
-        Malaria_disease_prediction = Malaria_Project.predict([[Age,Gender,Access_to_Clean_Water,Sanitation_Facilities,Proximity_to_Water_Source,Population_Density,Income_Level,Education_Level,Housing_Conditions,Season,Pre_existing_Conditions,Vaccination_Status,Access_to_Healthcare]])
+        Malaria_disease_prediction = Malaria_Project.predict([[Temperature_Above_Avg,High_Rainfall,High_Humidity,High_Population_Density,Malaria_Outbreak,Insecticide_Use,Health_Facilities_Adequate,Vaccination_Rate_High,Mosquito_Net_Coverage_High]])
     except ValueError as e:
         st.error(f"Prediction error: {str(e)}")
     
