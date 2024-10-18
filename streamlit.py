@@ -14,44 +14,32 @@ st.title('Malaria Prediction using ML')
 col1, col2, col3,col4, col5 = st.columns(5)
 
 with col1:
-    Age = st.text_input('Age')
+    Temperature_Above_Avg = st.text_input('Temperature_Above_Avg')
     
 with col2:
-    Gender = st.text_input('Gender')
+    High_Rainfall = st.text_input('High_Rainfall')
 
 with col3:
-    Access_to_Clean_Water = st.text_input('Access_to_Clean Water')
+    High_Humidity = st.text_input('High_Humidity')
     
 with col4:
-    Sanitation_Facilities = st.text_input('Sanitation_Facilities')
+    High_Population_Density = st.text_input('High_Population_Density')
     
 with col5:
-    Proximity_to_Water_Source = st.text_input('Proximity_to_Water_Source')
+    Malaria_Outbreak = st.text_input('Malaria_Outbreak')
 
 with col1:
-    Population_Density = st.text_input('Population_Density')
+    Insecticide_Use = st.text_input('Insecticide_Use')
     
 with col2:
-    Income_Level = st.text_input('Income_Level')
+    Health_Facilities_Adequate = st.text_input('Health_Facilities_Adequate')
 
 with col3:
-    Education_Level = st.text_input('Education_Level')
+    Vaccination_Rate_High = st.text_input('Vaccination_Rate_High')
 
 with col4:
-    Housing_Conditions = st.text_input('Housing_Conditions')
+    Malaria Effected = st.text_input('Malaria Effected')
 
-with col5:
-    Season = st.text_input('Season')
-    
-with col1:
-    Pre_existing_Conditions = st.text_input('Pre_existing_Conditions')
-
-with col2:
-    Vaccination_Status = st.text_input('Vaccination_Status')
-    
-with col3:
-    Access_to_Healthcare = st.text_input('Access_to_Healthcare')
-    
 # code for Prediction
 Malaria_diagnosis = ''
 
