@@ -1,6 +1,5 @@
 import pickle
 import streamlit as st
-from streamlit_option_menu import option_menu
 
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
@@ -21,21 +20,11 @@ page_bg_img = '''
         max-width: 900px;
         margin: 50px auto; /* Center the content */
         padding: 40px;
-        border: 3px solid white; /* Border around the entire content */
+        border: 3px solid white; /* Proper border */
         border-radius: 15px;
         background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
         backdrop-filter: blur(15px); /* Blur effect */
-        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7); /* Box shadow for depth */
-    }
-    input {
-        background-color: white !important;
-        color: black !important;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        padding: 12px;
-        font-size: 16px;
-        margin-bottom: 10px;
-        width: 100%; /* Make input fields responsive */
+        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7); /* Box shadow */
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -50,8 +39,19 @@ page_bg_img = '''
         color: #4CAF50;
         border: 2px solid #4CAF50;
     }
+    input {
+        background-color: white !important;
+        color: black !important;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 12px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        width: 100%; /* Full-width inputs */
+    }
     h1, h2, h3, h4, h5, h6, p {
         color: white !important;
+        text-align: center;
     }
 </style>
 '''
@@ -61,7 +61,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
 
 # Page title
-st.markdown("<h1 style='text-align: center;'>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
+st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
 # Input section
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -92,9 +92,9 @@ Malaria_diagnosis = ''
 if st.button('🔍 Malaria Disease Test'):
     try:
         prediction = Malaria_Project.predict([[
-            Temperature_Above_Avg, High_Rainfall, High_Humidity, High_Population_Density,
-            Malaria_Outbreak, Insecticide_Use, Health_Facilities_Adequate,
-            Vaccination_Rate_High, Mosquito_Net_Coverage_High
+            Temperature_Above_Avg, High_Rainfall, High_Humidity,
+            High_Population_Density, Malaria_Outbreak, Insecticide_Use,
+            Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
         ]])
         if prediction[0] == 1:
             Malaria_diagnosis = 'The person is affected with Malaria 😷'
