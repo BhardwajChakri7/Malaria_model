@@ -7,11 +7,12 @@ import streamlit.components.v1 as components
 html_code = """
 <style>
 body {
-    background-color: #f0f2f6;
-    font-family: Arial, sans-serif;
+    background-image: url('https://www.example.com/background.jpg');
+    background-size: cover;
+    font-family: 'Helvetica Neue', sans-serif;
 }
 .stButton button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -22,6 +23,11 @@ body {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+.stButton button:hover {
+    background-color: #45a049;
 }
 .stTextInput input {
     border: 2px solid #ccc;
@@ -29,6 +35,8 @@ body {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 .stTextInput label {
     font-weight: bold;
@@ -36,6 +44,12 @@ body {
 }
 .container {
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+h1 {
+    color: #4CAF50;
 }
 </style>
 """
