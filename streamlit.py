@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 html_code = """
 <style>
 body {
-    background-image: url('https://t3.ftcdn.net/jpg/07/92/27/06/240_F_792270657_Sq8vDFVamGnCMRyAmyWhZdVZyqLXYLzl.jpg');
+    background-image: url('Images-free-abstract-minimalist-wallpaper-HD.jpg');
     background-size: cover;
     font-family: 'Helvetica Neue', sans-serif;
 }
