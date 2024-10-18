@@ -5,13 +5,15 @@ import requests
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
 
-# Get user's state using IP info
+# Get user's state using IP info from ip-api.com
 def get_user_state():
     try:
-        response = requests.get('https://ipinfo.io')
+        response = requests.get('http://ip-api.com/json/')
         data = response.json()
-        state = data.get('region', 'Unknown State')
-        return state
+        if data['status'] == 'success':
+            return data.get('regionName', 'Unknown State')
+        else:
+            return 'Unknown State'
     except Exception as e:
         return f"Unable to retrieve state: {str(e)}"
 
