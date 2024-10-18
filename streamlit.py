@@ -37,9 +37,6 @@ with col2:
 with col3:
     Vaccination_Rate_High = st.text_input('Vaccination_Rate_High')
 
-with col4:
-    Malaria Effected = st.text_input('Malaria Effected')
-
 # code for Prediction
 Malaria_diagnosis = ''
 
