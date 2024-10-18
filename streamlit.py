@@ -17,15 +17,15 @@ page_bg_img = '''
     [data-testid="stHeader"] {
         background: rgba(0, 0, 0, 0); /* Transparent header */
     }
-    .content-container {
+    .content-wrapper {
         max-width: 900px;
-        margin: 50px auto;
+        margin: 50px auto; /* Center the content */
         padding: 40px;
-        border: 2px solid white; /* Border around entire content */
+        border: 3px solid white; /* Border around the entire content */
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
-        backdrop-filter: blur(20px); /* Blur effect */
-        box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.7); /* Box shadow for depth */
+        background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+        backdrop-filter: blur(15px); /* Blur effect */
+        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7); /* Box shadow for depth */
     }
     input {
         background-color: white !important;
@@ -57,13 +57,13 @@ page_bg_img = '''
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
+# Start the content wrapper
+st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
+
 # Page title
 st.markdown("<h1 style='text-align: center;'>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
-# Input section wrapped in a bordered, centered container
-st.markdown('<div class="content-container">', unsafe_allow_html=True)
-
-# Input columns
+# Input section
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
@@ -106,4 +106,5 @@ if st.button('🔍 Malaria Disease Test'):
 # Display result
 st.success(Malaria_diagnosis)
 
+# End the content wrapper
 st.markdown('</div>', unsafe_allow_html=True)
