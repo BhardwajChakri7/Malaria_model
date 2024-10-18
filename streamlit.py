@@ -18,13 +18,13 @@ page_bg_img = '''
     }
     .block-container {
         max-width: 800px;
-        margin: 50px auto; /* Center the content */
+        margin: 50px auto;
         padding: 20px;
-        border: 2px solid #ccc; /* Full border */
+        border: 2px solid #ccc;
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        backdrop-filter: blur(10px); /* Background blur effect */
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
     }
     input {
         background-color: white !important;
@@ -33,8 +33,8 @@ page_bg_img = '''
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
-        width: 90%; /* Ensure inputs are the same width */
-        margin: 5px 0; /* Spacing between inputs */
+        width: 90%;
+        margin: 5px 0;
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -59,6 +59,19 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 # Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
+# Location input container
+with st.container():
+    state = st.selectbox(
+        'Select your location (Indian State)',
+        options=[
+            'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
+            'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
+            'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
+            'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+            'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+        ]
+    )
+
 # Input section in 3 columns
 col1, col2, col3 = st.columns(3)
 
@@ -82,18 +95,21 @@ Malaria_diagnosis = ''
 
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
-    try:
-        prediction = Malaria_Project.predict([[
-            Temperature_Above_Avg, High_Rainfall, High_Humidity,
-            High_Population_Density, Malaria_Outbreak, Insecticide_Use,
-            Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
-        ]])
-        if prediction[0] == 1:
-            Malaria_diagnosis = 'The person is affected with Malaria 😷'
-        else:
-            Malaria_diagnosis = 'The person is not affected with Malaria 😊'
-    except ValueError as e:
-        st.error(f"Prediction error: {str(e)}")
+    if not state:
+        st.error("Please select your location.")
+    else:
+        try:
+            prediction = Malaria_Project.predict([[ 
+                Temperature_Above_Avg, High_Rainfall, High_Humidity, 
+                High_Population_Density, Malaria_Outbreak, Insecticide_Use, 
+                Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High 
+            ]])
+            if prediction[0] == 1:
+                Malaria_diagnosis = 'The person is affected with Malaria 😷'
+            else:
+                Malaria_diagnosis = 'The person is not affected with Malaria 😊'
+        except ValueError as e:
+            st.error(f"Prediction error: {str(e)}")
 
 # Display result
 st.success(Malaria_diagnosis)
