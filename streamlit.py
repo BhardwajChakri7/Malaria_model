@@ -20,11 +20,11 @@ page_bg_img = '''
     .content-container {
         max-width: 900px;
         margin: 50px auto;
-        padding: 30px;
-        border: 2px solid rgba(255, 255, 255, 0.5);
+        padding: 40px;
+        border: 2px solid white; /* Border around entire content */
         border-radius: 15px;
         background: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
-        backdrop-filter: blur(15px); /* Blur effect */
+        backdrop-filter: blur(20px); /* Blur effect */
         box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.7); /* Box shadow for depth */
     }
     input {
@@ -35,6 +35,7 @@ page_bg_img = '''
         padding: 12px;
         font-size: 16px;
         margin-bottom: 10px;
+        width: 100%; /* Make input fields responsive */
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -59,51 +60,50 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 # Page title
 st.markdown("<h1 style='text-align: center;'>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
-# Input section with border and blur
-with st.container():
-    st.markdown('<div class="content-container">', unsafe_allow_html=True)
+# Input section wrapped in a bordered, centered container
+st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
-    # Input columns
-    col1, col2, col3, col4, col5 = st.columns(5)
+# Input columns
+col1, col2, col3, col4, col5 = st.columns(5)
 
-    with col1:
-        Temperature_Above_Avg = st.text_input('Temperature Above Avg')
-        Insecticide_Use = st.text_input('Insecticide Use')
+with col1:
+    Temperature_Above_Avg = st.text_input('Temperature Above Avg')
+    Insecticide_Use = st.text_input('Insecticide Use')
 
-    with col2:
-        High_Rainfall = st.text_input('High Rainfall')
-        Health_Facilities_Adequate = st.text_input('Health Facilities Adequate')
+with col2:
+    High_Rainfall = st.text_input('High Rainfall')
+    Health_Facilities_Adequate = st.text_input('Health Facilities Adequate')
 
-    with col3:
-        High_Humidity = st.text_input('High Humidity')
-        Vaccination_Rate_High = st.text_input('Vaccination Rate High')
+with col3:
+    High_Humidity = st.text_input('High Humidity')
+    Vaccination_Rate_High = st.text_input('Vaccination Rate High')
 
-    with col4:
-        High_Population_Density = st.text_input('High Population Density')
-        Mosquito_Net_Coverage_High = st.text_input('Mosquito Net Coverage High')
+with col4:
+    High_Population_Density = st.text_input('High Population Density')
+    Mosquito_Net_Coverage_High = st.text_input('Mosquito Net Coverage High')
 
-    with col5:
-        Malaria_Outbreak = st.text_input('Malaria Outbreak')
+with col5:
+    Malaria_Outbreak = st.text_input('Malaria Outbreak')
 
-    # Prediction result
-    Malaria_diagnosis = ''
+# Prediction result
+Malaria_diagnosis = ''
 
-    # Prediction button
-    if st.button('🔍 Malaria Disease Test'):
-        try:
-            prediction = Malaria_Project.predict([[
-                Temperature_Above_Avg, High_Rainfall, High_Humidity, High_Population_Density,
-                Malaria_Outbreak, Insecticide_Use, Health_Facilities_Adequate,
-                Vaccination_Rate_High, Mosquito_Net_Coverage_High
-            ]])
-            if prediction[0] == 1:
-                Malaria_diagnosis = 'The person is affected with Malaria 😷'
-            else:
-                Malaria_diagnosis = 'The person is not affected with Malaria 😊'
-        except ValueError as e:
-            st.error(f"Prediction error: {str(e)}")
+# Prediction button
+if st.button('🔍 Malaria Disease Test'):
+    try:
+        prediction = Malaria_Project.predict([[
+            Temperature_Above_Avg, High_Rainfall, High_Humidity, High_Population_Density,
+            Malaria_Outbreak, Insecticide_Use, Health_Facilities_Adequate,
+            Vaccination_Rate_High, Mosquito_Net_Coverage_High
+        ]])
+        if prediction[0] == 1:
+            Malaria_diagnosis = 'The person is affected with Malaria 😷'
+        else:
+            Malaria_diagnosis = 'The person is not affected with Malaria 😊'
+    except ValueError as e:
+        st.error(f"Prediction error: {str(e)}")
 
-    # Display result
-    st.success(Malaria_diagnosis)
+# Display result
+st.success(Malaria_diagnosis)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
