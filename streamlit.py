@@ -4,7 +4,7 @@ import streamlit as st
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
 
-# Apply background image only
+# Apply background image with border and blur inside
 page_bg_img = '''
 <style>
     [data-testid="stAppViewContainer"] {
@@ -12,9 +12,19 @@ page_bg_img = '''
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+        padding: 50px;
     }
     [data-testid="stHeader"] {
-        background: rgba(0, 0, 0, 0); /* Transparent header */
+        background: rgba(0, 0, 0, 0);
+    }
+    .main-content {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        border: 2px solid white;
+        max-width: 800px;
+        margin: auto;
     }
     input {
         background-color: white !important;
@@ -33,6 +43,8 @@ page_bg_img = '''
 </style>
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
+
+st.markdown('<div class="main-content">', unsafe_allow_html=True)
 
 # Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
@@ -65,7 +77,7 @@ Malaria_diagnosis = ''
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
     try:
-        prediction = Malaria_Project.predict([[
+        prediction = Malaria_Project.predict([[ 
             Temperature_Above_Avg, High_Rainfall, High_Humidity,
             High_Population_Density, Malaria_Outbreak, Insecticide_Use,
             Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
@@ -77,5 +89,5 @@ if st.button('🔍 Malaria Disease Test'):
     except ValueError as e:
         st.error(f"Prediction error: {str(e)}")
 
-# Display result
 st.success(Malaria_diagnosis)
+st.markdown('</div>', unsafe_allow_html=True)
