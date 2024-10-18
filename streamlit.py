@@ -3,7 +3,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 # Load the saved model
-malaria = pickle.load(open('malaria_model10.sav', 'rb'))
+malaria = pickle.load(open('malaria_model1.sav', 'rb'))
 
 # Use the raw GitHub link for the background image
 page_bg_img = '''
