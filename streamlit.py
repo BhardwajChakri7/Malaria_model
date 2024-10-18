@@ -5,7 +5,7 @@ from streamlit_option_menu import option_menu
 
 # loading the saved models
 
-Malaria_Project = pickle.load(open('', 'rb'))
+Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
 # page title
 st.title('Malaria Prediction using ML')
 
