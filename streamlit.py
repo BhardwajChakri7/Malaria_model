@@ -2,99 +2,58 @@ import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-# Load the saved model
-malaria = pickle.load(open('malaria_model1.sav', 'rb'))
 
-# Use the raw GitHub link for the background image
-page_bg_img = '''
-<style>
-    [data-testid="stAppViewContainer"] {
-        background-image: url("https://github.com/SHAIK-RAIYAN-2022-CSE/malaria/blob/main/Images-free-abstract-minimalist-wallpaper-HD.jpg?raw=true");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-    [data-testid="stHeader"] {
-        background: rgba(0, 0, 0, 0); /* Transparent header */
-    }
-    .block-container {
-        max-width: 800px;
-        margin: 50px auto; /* Center the content */
-        padding: 20px;
-        border: 2px solid #ccc; /* Full border */
-        border-radius: 15px;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        backdrop-filter: blur(10px); /* Background blur effect */
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
-    }
-    input {
-        background-color: white !important;
-        color: black !important;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-size: 16px;
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        font-size: 16px;
-        padding: 10px 24px;
-        border-radius: 8px;
-        transition: 0.3s;
-    }
-    .stButton>button:hover {
-        background-color: white;
-        color: #4CAF50;
-        border: 2px solid #4CAF50;
-    }
-    h1, h2, h3, h4, h5, h6, p {
-        color: white !important;
-    }
-</style>
-'''
-st.markdown(page_bg_img, unsafe_allow_html=True)
+# loading the saved models
 
-# Page title
-st.markdown("<h1 style='text-align: center;'>🌿 Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
+Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
+# page title
+st.title('Malaria Prediction using ML')
 
-# Input section with a subheader
-st.subheader("Enter Health and Environmental Factors")
 
-# Align inputs in three rows for better structure
-with st.container():
-    col1, col2, col3, col4 = st.columns(4)
+# getting the input data from the user
+col1, col2, col3,col4, col5 = st.columns(5)
 
-    with col1:
-        temperature_above_avg = st.text_input('🌡 Temperature Above Avg')
-        health_facilities_adequate = st.text_input('🏥 Health Facilities Adequate')
+with col1:
+    Temperature_Above_Avg = st.text_input('Temperature_Above_Avg')
+    
+with col2:
+    High_Rainfall = st.text_input('High_Rainfall')
 
-    with col2:
-        high_rainfall = st.text_input('🌧 High Rainfall')
-        vaccination_rate_high = st.text_input('💉 Vaccination Rate High')
+with col3:
+    High_Humidity = st.text_input('High_Humidity')
+    
+with col4:
+    High_Population_Density = st.text_input('High_Population_Density')
+    
+with col5:
+    Malaria_Outbreak = st.text_input('Malaria_Outbreak')
 
-    with col3:
-        high_humidity = st.text_input('💧 High Humidity')
-        mosquito_net_coverage_high = st.text_input('🛏 Mosquito Net Coverage High')
+with col1:
+    Insecticide_Use = st.text_input('Insecticide_Use')
+    
+with col2:
+    Health_Facilities_Adequate = st.text_input('Health_Facilities_Adequate')
 
-    with col4:
-        high_population_density = st.text_input('🏙 Population Density')
-        malaria_outbreak = st.text_input('🦟 Malaria Outbreak')
+with col3:
+    Vaccination_Rate_High = st.text_input('Vaccination_Rate_High')
+    
+with col4:
+    Mosquito_Net_Coverage_High = st.text_input('Mosquito_Net_Coverage_High')
 
-# Prediction result
-malaria_diagnosis = ''
+# code for Prediction
+Malaria_diagnosis = ''
 
-# Prediction button
-if st.button('🔍 Predict Malaria'):
-    malaria_prediction = malaria.predict([[temperature_above_avg, high_rainfall, high_humidity,
-                                           high_population_density, malaria_outbreak,
-                                           health_facilities_adequate, vaccination_rate_high,
-                                           mosquito_net_coverage_high]])
+# creating a button for Prediction
 
-    if malaria_prediction[0] == 1:
-        malaria_diagnosis = 'The person is affected with Malaria 😷'
+if st.button('Malaria Disease Test Button'):
+    try:
+        Malaria_disease_prediction = Malaria_Project.predict([[Temperature_Above_Avg,High_Rainfall,High_Humidity,High_Population_Density,Malaria_Outbreak,Insecticide_Use,Health_Facilities_Adequate,Vaccination_Rate_High,Mosquito_Net_Coverage_High]])
+    except ValueError as e:
+        st.error(f"Prediction error: {str(e)}")
+    
+    if (Malaria_disease_prediction[0] == 1):
+      Malaria_diagnosis = 'The person is effected with Malaria'
     else:
-        malaria_diagnosis = 'The person is NOT affected with Malaria 😊'
-
-# Display result
-st.success(malaria_diagnosis)
+      Malaria_diagnosis = 'The person is not effected with Malaria'
+    
+st.success(Malaria_diagnosis)
