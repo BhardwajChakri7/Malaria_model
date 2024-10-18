@@ -36,6 +36,9 @@ with col2:
 
 with col3:
     Vaccination_Rate_High = st.text_input('Vaccination_Rate_High')
+    
+with col4:
+    Mosquito_Net_Coverage_High = st.text_input('Mosquito_Net_Coverage_High')
 
 # code for Prediction
 Malaria_diagnosis = ''
