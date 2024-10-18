@@ -4,7 +4,7 @@ import streamlit as st
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
 
-# Apply background image and styling
+# Apply background image only
 page_bg_img = '''
 <style>
     [data-testid="stAppViewContainer"] {
@@ -16,46 +16,23 @@ page_bg_img = '''
     [data-testid="stHeader"] {
         background: rgba(0, 0, 0, 0); /* Transparent header */
     }
-    .content-wrapper {
-        max-width: 900px;
-        margin: 50px auto; /* Center the content */
-        padding: 40px;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7); /* Box shadow */
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        font-size: 16px;
-        padding: 12px 28px;
-        border-radius: 8px;
-        transition: 0.3s;
-    }
-    .stButton>button:hover {
-        background-color: white;
-        color: #4CAF50;
-        border: 2px solid #4CAF50;
-    }
     input {
         background-color: white !important;
         color: black !important;
-        border-radius: 8px;
+        border-radius: 5px;
         border: 1px solid #ccc;
-        padding: 12px;
+        padding: 10px;
         font-size: 16px;
+        width: 100%;
         margin-bottom: 10px;
-        width: 100%; /* Full-width inputs */
     }
-    h1, h2, h3, h4, h5, h6, p {
-        color: white !important;
+    h1 {
+        color: white;
         text-align: center;
     }
 </style>
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# Start the content wrapper
-st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
 
 # Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
@@ -102,6 +79,3 @@ if st.button('🔍 Malaria Disease Test'):
 
 # Display result
 st.success(Malaria_diagnosis)
-
-# End the content wrapper
-st.markdown('</div>', unsafe_allow_html=True)
