@@ -1,5 +1,14 @@
-import pickle
+import firebase_admin
+from firebase_admin import credentials, firestore
 import streamlit as st
+import pickle
+from datetime import datetime
+
+# Initialize Firebase
+cred = credentials.Certificate("path/to/your-firebase-adminsdk.json")
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 # Load the saved model
 Malaria_Project = pickle.load(open('malaria_model1.sav', 'rb'))
@@ -14,17 +23,17 @@ page_bg_img = '''
         background-repeat: no-repeat;
     }
     [data-testid="stHeader"] {
-        background: rgba(0, 0, 0, 0);
+        background: rgba(0, 0, 0, 0); /* Transparent header */
     }
     .block-container {
         max-width: 800px;
-        margin: 50px auto;
+        margin: 50px auto; /* Center the content */
         padding: 20px;
-        border: 2px solid #ccc;
+        border: 2px solid #ccc; /* Full border */
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(10px);
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Background blur effect */
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
     }
     input {
         background-color: white !important;
@@ -33,8 +42,8 @@ page_bg_img = '''
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
-        width: 90%;
-        margin: 5px 0;
+        width: 90%; /* Ensure inputs are the same width */
+        margin: 5px 0; /* Spacing between inputs */
     }
     .stButton>button {
         background-color: #4CAF50;
@@ -59,20 +68,6 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 # Page title
 st.markdown("<h1>Malaria Prediction using Machine Learning</h1>", unsafe_allow_html=True)
 
-# Location input container
-with st.container():
-    state = st.selectbox(
-        'Select your location (Indian State)', 
-        options=[''] + [
-            'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
-            'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
-            'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
-            'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
-            'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
-        ],
-        index=0
-    )
-
 # Input section in 3 columns
 col1, col2, col3 = st.columns(3)
 
@@ -94,23 +89,44 @@ with col3:
 # Prediction result
 Malaria_diagnosis = ''
 
+# Function to add test result to Firestore
+def add_test_result(data):
+    db.collection('malaria_test_results').add(data)
+
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
-    if state == '':
-        st.error("Please select your location.")
-    else:
-        try:
-            prediction = Malaria_Project.predict([[ 
-                Temperature_Above_Avg, High_Rainfall, High_Humidity, 
-                High_Population_Density, Malaria_Outbreak, Insecticide_Use, 
-                Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High 
-            ]])
-            if prediction[0] == 1:
-                Malaria_diagnosis = 'The person is affected with Malaria 😷'
-            else:
-                Malaria_diagnosis = 'The person is not affected with Malaria 😊'
-        except ValueError as e:
-            st.error(f"Prediction error: {str(e)}")
+    try:
+        prediction = Malaria_Project.predict([[
+            Temperature_Above_Avg, High_Rainfall, High_Humidity,
+            High_Population_Density, Malaria_Outbreak, Insecticide_Use,
+            Health_Facilities_Adequate, Vaccination_Rate_High, Mosquito_Net_Coverage_High
+        ]])
+        if prediction[0] == 1:
+            Malaria_diagnosis = 'The person is affected with Malaria 😷'
+        else:
+            Malaria_diagnosis = 'The person is not affected with Malaria 😊'
+
+        # Prepare data for Firestore
+        data = {
+            'timestamp': datetime.now(),
+            'Temperature_Above_Avg': Temperature_Above_Avg,
+            'High_Rainfall': High_Rainfall,
+            'High_Humidity': High_Humidity,
+            'High_Population_Density': High_Population_Density,
+            'Malaria_Outbreak': Malaria_Outbreak,
+            'Insecticide_Use': Insecticide_Use,
+            'Health_Facilities_Adequate': Health_Facilities_Adequate,
+            'Vaccination_Rate_High': Vaccination_Rate_High,
+            'Mosquito_Net_Coverage_High': Mosquito_Net_Coverage_High,
+            'Malaria_diagnosis': Malaria_diagnosis
+        }
+
+        # Add data to Firestore
+        add_test_result(data)
+
+        st.success(Malaria_diagnosis)
+    except ValueError as e:
+        st.error(f"Prediction error: {str(e)}")
 
 # Display result
 st.success(Malaria_diagnosis)
