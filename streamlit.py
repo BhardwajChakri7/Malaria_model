@@ -20,10 +20,7 @@ page_bg_img = '''
         max-width: 900px;
         margin: 50px auto; /* Center the content */
         padding: 40px;
-        border: 3px solid white; /* Proper border */
-        border-radius: 15px;
-        background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
-        backdrop-filter: blur(15px); /* Blur effect */
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7); /* Box shadow */
     }
     .stButton>button {
