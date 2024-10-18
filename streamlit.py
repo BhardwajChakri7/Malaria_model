@@ -16,19 +16,39 @@ page_bg_img = '''
     [data-testid="stHeader"] {
         background: rgba(0, 0, 0, 0); /* Transparent header */
     }
+    .block-container {
+        max-width: 800px;
+        margin: 50px auto; /* Center the content */
+        padding: 20px;
+        border: 2px solid #ccc; /* Full border */
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Background blur effect */
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6); /* Box shadow for depth */
+    }
     input {
         background-color: white !important;
         color: black !important;
-        border-radius: 5px;
+        border-radius: 10px;
         border: 1px solid #ccc;
         padding: 10px;
         font-size: 16px;
-        width: 100%;
-        margin-bottom: 10px;
     }
-    h1 {
+    .stButton>button {
+        background-color: #4CAF50;
         color: white;
-        text-align: center;
+        font-size: 16px;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: white;
+        color: #4CAF50;
+        border: 2px solid #4CAF50;
+    }
+    h1, h2, h3, h4, h5, h6, p {
+        color: white !important;
     }
 </style>
 '''
