@@ -34,11 +34,14 @@ Malaria_diagnosis = ''
 
 # Prediction button
 if st.button('🔍 Malaria Disease Test'):
-    prediction = Malaria_Project.predict([[
+    # Make the prediction
+    prediction = Malaria_Project.predict([[ 
         Temperature_Above_Avg, High_Rainfall, High_Humidity,
         Insecticide_Use, Health_Facilities_Adequate, Vaccination_Rate_High,
         High_Population_Density, Mosquito_Net_Coverage_High, Malaria_Outbreak
     ]])
+    
+    # Determine the diagnosis
     Malaria_diagnosis = 'The person is affected with Malaria 😷' if prediction[0] == 1 else 'The person is not affected with Malaria 😊'
     
     # Prepare data to save
